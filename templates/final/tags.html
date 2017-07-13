@@ -1,0 +1,15 @@
+{% extends "final/base.html" %}
+
+{% block title %}Index{% endblock %}
+  
+{% block body_block %}
+<h5>Edit my categories:</h5>
+<div class="row-fluid">
+  <form class="span8" id="user_form" method="post" action="/tags/{{ user_id }}/" enctype="multipart/form-data">
+		{% csrf_token %}
+		{{ user_form }}
+		<br/><input class="btn btn-primary" type="submit" name="submit" value="Update"/>
+  </form>  
+</div>
+<!--/row-->
+{% endblock %}

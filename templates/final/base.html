@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+{% load static %}
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<!-- Bootstrap -->
+<link href="{% static 'css/bootstrap-fluid-adj.css' %}" rel="stylesheet">
+<link href="{% static 'css/bootstrap.css' %}" rel="stylesheet" media="screen">
+<link href="{% static 'css/bootstrap-responsive.css' %}" rel="stylesheet">
+
+<title>Final Project - Sports RSS Feeds</title>
+</head>
+<body>
+
+<div class="container-fluid">
+<div class="row-fluid">
+<!--/span-->
+<div class="hero-unit">
+    <h2>Final Project - Sports RSS Feeds</h2>
+    <p>View sports feeds from a variety of sources based on categories.</p>
+</div>
+<div>
+{% block body_block %}
+{% endblock %}
+</div>
+<!--/span-->
+</div>
+<!--/row-->
+</div>
+<!--/.fluid-container-->
+
+<script src="{% static 'js/jquery-3.2.1.min.js' %}"></script>
+<script src="{% static 'js/bootstrap.min.js' %}"></script>
+<script>
+
+function applyLoad() {
+var i=0;
+var bgImage="";
+	$( ".replace_image" ).each(function( index ) {
+	//console.log( index + ": " + $( this ).attr("data-original") );
+	link = $( this ).attr("data-original");
+	divID = $( this ).attr("id");
+	//console.log( index + ": " + divID );
+	i++;
+
+	var link_src_q = "https://graph.facebook.com/v2.2/?id="+ link +"&fields=og_object.fields(image{url},title,description,see_also)&access_token=287637438055214|9E_8GW1nnMsBzgzp9Fmlas5GsI0";		
+
+		$.getJSON(link_src_q, function () {})
+	        	.done(function (fbData) {
+			if (typeof fbData.og_object.image !== typeof undefined && typeof fbData.og_object.image[0] !== typeof undefined && fbData.og_object.image[0] !== false) {
+				bgImage = JSON.stringify(fbData.og_object.image[0].url);
+				//bgImage = bgImage.replace(/\"/g, '');
+				
+				$("#div_"+ i).css("background-image","url("+ bgImage +")");
+			}
+			})
+	});
+}
+
+$( document ).ready(function() {
+	var timeout = setTimeout(function() { applyLoad(); }, 5000);
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,53 @@
+{% extends "final/base.html" %}
+
+{% block title %}Index{% endblock %}
+
+{% block body_block %}
+<div class="row-fluid">
+	<form id="search_filter" method="post" action="/">
+		{% csrf_token %}
+		<h5>First select a user to impersonate login:</h5>
+		<select name="user" id="query">
+			<option value="">Select</option>
+			{% for user in users %}
+				<option value="{{ user.id }}">{{ user.name }}</option>
+			{% endfor %}
+		</select>
+		<br/><input type="submit" name="submit" value="Select" />
+    </form>
+	{% if selected_user %}
+		<h4>Hello {{ selected_user.name }}!</h4>
+		<a href="/tags/{{ selected_user.id }}">Edit my categories</a>
+	{% endif %}
+</div>
+
+<div class="row-fluid">
+    <h3>Feed Entries</h3>
+	{% if selected_tags %}
+		{% for tag in selected_tags %}
+		  <h4>{{tag.name}}</h4>
+		  {% if entries %}
+			{% for entry in entries %}
+				{% if entry.tag == tag.name %}
+					<div style="top: 0;
+    width: 48%;
+    vertical-align: top;
+    position: relative;
+    display: inline-block !important;
+    float: none;
+    padding: 5px"><div class="replace_image" id="div_{{entry.id}}" data-original="{{entry.link}}" style="display: block; padding-top: 50%; background-color: white;
+    background-position: top center;
+    background-repeat: no-repeat;
+    background-size: cover;"></div><br/><strong><a href="{{entry.link}}">{{entry.title}}</a></strong><br/>{{entry.name}} | {{entry.published}}</div>
+				{% endif %}
+			{% endfor %}
+		  {% else %}
+			<strong>There are no entries present.</strong>
+		  {% endif %}
+		{% endfor %}
+	{% else %}
+      <strong>There are no tags present.</strong>
+    {% endif %}
+</div>
+<!--/row-->
+{% endblock %}
